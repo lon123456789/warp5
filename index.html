@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farcaster User Info</title>
+    
+    <!-- Frame Configuration for Warpcast -->
+    <meta property="fc:frame" content="vNext" />
+    <meta property="fc:frame:image" content="https://i.imgur.com/5LMzFZk.jpeg" />
+    <meta property="og:image" content="https://i.imgur.com/5LMzFZk.jpeg" />
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #user-info {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Farcaster User Info</h1>
+    <img src="https://i.imgur.com/5LMzFZk.jpeg" alt="User Image" style="width: 100%; max-width: 300px;" />
+    <button onclick="fetchUserInfo()">Fetch User Info</button>
+    <div id="user-info">Click the button above to fetch user info.</div>
+
+    <script>
+        function fetchUserInfo() {
+            const fid = 19266; // Replace with actual Farcaster ID
+            const url = `https://corsproxy.io/?https://api.warpcast.com/v1/users/${fid}/casts`;
+
+            fetch(url, {
+                method: 'GET',
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                let info = data.result.map(cast => `<p>${cast.text}</p>`).join('');
+                document.getElementById('user-info').innerHTML = info;
+            })
+            .catch(error => {
+                document.getElementById('user-info').innerHTML = 'Error fetching user info';
+                console.error('Error fetching user info:', error);
+            });
+        }
+    </script>
+</body>
+</html>
